@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Class-Path: gdx.jar gdx-sources.jar gdx-natives.jar gdx-backend-lwjgl.
+ jar gdx-backend-lwjgl-natives.jar
+Main-Class: com.taigh.ape.DesktopStarter
+

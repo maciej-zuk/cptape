@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-public class GameInputProcessor implements GestureListener {
+public class GameGestureListener implements GestureListener {
 
 	public interface InputReceiver {
 		public Rectangle getRectangle();
@@ -29,7 +29,7 @@ public class GameInputProcessor implements GestureListener {
 	private final Vector3 touchPos = new Vector3();
 	private float lastDistance;
 
-	public GameInputProcessor() {
+	public GameGestureListener() {
 		lastDistance = 0;
 
 	}

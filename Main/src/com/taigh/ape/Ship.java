@@ -64,10 +64,6 @@ public class Ship implements ObservableCircle {
 		}
 	}
 
-	interface reachCallback {
-		void reached();
-	}
-
 	SmokeTrail trail[];
 
 	public Ship() {

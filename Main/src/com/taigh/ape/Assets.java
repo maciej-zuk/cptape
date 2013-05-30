@@ -44,7 +44,6 @@ public class Assets {
 	public static float dt;
 	public static Ship playerShip;
 	public static Random random;
-	public static Background background;
 	public static PlanetsSystem system;
 	public static Texture planetCircle;
 	public static Sprite planetSprite;
@@ -77,8 +76,7 @@ public class Assets {
 		texFont.dispose();
 		shapeRenderer.dispose();
 		system.dispose();
-		background.dispose();
-		planetCircle.dispose();
+    	planetCircle.dispose();
 	}
 
 	public static void loadAssets() {
@@ -154,7 +152,6 @@ public class Assets {
 		cameraPersp.far = 10000;
 
 		random = new Random();
-		background = new Background();
 		system = new PlanetsSystem();
 		Assets.updateCams();
 		fx = new SimpleFX();

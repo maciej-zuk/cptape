@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Disposable;
-import com.taigh.ape.GameInputProcessor.InputReceiver;
+import com.taigh.ape.GameGestureListener.InputReceiver;
 import com.taigh.ape.Menu.MenuCallback;
-import com.taigh.ape.Ship.reachCallback;
+import com.taigh.ape.SimpleFX.FloatingBox.BoxReachCallback;
 
 public class Planet implements InputReceiver, Disposable, ObservableCircle {
 
@@ -15,7 +15,7 @@ public class Planet implements InputReceiver, Disposable, ObservableCircle {
 		empty, terraformed, terraforming, terraformingPaused, terraformingStart
 	}
 
-	class BoxReachesPlanet implements reachCallback {
+	class BoxReachesPlanet implements BoxReachCallback {
 		int sent = 0;
 
 		@Override
@@ -48,7 +48,7 @@ public class Planet implements InputReceiver, Disposable, ObservableCircle {
 							wares -= amount;
 							if (amount < 1)
 								return false;
-							Assets.fx.shootBox(Planet.this, Assets.playerShip, new reachCallback() {
+							Assets.fx.shootBox(Planet.this, Assets.playerShip, new BoxReachCallback() {
 								@Override
 								public void reached() {
 									Assets.playerShip.boxesOnBoard += amount;
@@ -63,7 +63,7 @@ public class Planet implements InputReceiver, Disposable, ObservableCircle {
 						public boolean clicked() {
 							if (Assets.playerShip.boxesOnBoard >= 40) {
 								Assets.playerShip.boxesOnBoard -= 40;
-								Assets.fx.shootBox(Planet.this, Assets.playerShip, new reachCallback() {
+								Assets.fx.shootBox(Planet.this, Assets.playerShip, new BoxReachCallback() {
 									@Override
 									public void reached() {
 										Assets.playerShip.health = 1;
@@ -97,19 +97,19 @@ public class Planet implements InputReceiver, Disposable, ObservableCircle {
 	BoxReachesPlanet cb;
 
 	private class TerraformUnit {
-		float alfa;
+		float alpha;
 		int id;
 		float random;
 		float rotation;
 		float scale;
 
-		public TerraformUnit(float rotation, int id, float scale, float random, float alfa) {
+		public TerraformUnit(float rotation, int id, float scale, float random, float alpha) {
 			super();
 			this.rotation = rotation;
 			this.id = id;
 			this.scale = scale;
 			this.random = random;
-			this.alfa = alfa;
+			this.alpha = alpha;
 		}
 	}
 
@@ -131,7 +131,7 @@ public class Planet implements InputReceiver, Disposable, ObservableCircle {
 		return id;
 	}
 
-	public final Circle circle = new Circle();;
+	public final Circle circle = new Circle();
 
 	private MenuCallback terraformCallback;
 
@@ -142,7 +142,7 @@ public class Planet implements InputReceiver, Disposable, ObservableCircle {
 	private TerraformUnit units[];
 
 	public Planet(Color planetColor, float planetSize) {
-		Game.giListener.registerReceiver(this);
+		Game.gestureListener.registerReceiver(this);
 
 		this.planetColor = planetColor;
 		radius = planetSize;
@@ -196,7 +196,7 @@ public class Planet implements InputReceiver, Disposable, ObservableCircle {
 
 	@Override
 	public void dispose() {
-		Game.giListener.unregisterReceiver(this);
+		Game.gestureListener.unregisterReceiver(this);
 		menu.dispose();
 	}
 
@@ -233,14 +233,14 @@ public class Planet implements InputReceiver, Disposable, ObservableCircle {
 			float scale = radius * units[i].scale / 512.0f;
 			Sprite plant = Assets.sprtPlants[units[i].id];
 			float originShift = 0.95f * radius / scale;
-			plant.setColor(planetColor.r, planetColor.g, planetColor.b, units[i].alfa);
+			plant.setColor(planetColor.r, planetColor.g, planetColor.b, units[i].alpha);
 			plant.setOrigin(plant.getOriginX(), -originShift);
 			plant.setRotation(units[i].rotation + rotation * (0.5f + units[i].random));
 			plant.setPosition(posX - plant.getOriginX(), posY - plant.getOriginY());
 			plant.setScale(scale);
 			plant.draw(Assets.batch);
-			if (units[i].alfa < 0.5f)
-				units[i].alfa += 0.001f;
+			if (units[i].alpha < 0.5f)
+				units[i].alpha += 0.001f;
 		}
 		Assets.planetSprite.setColor(planetColor);
 		Assets.planetSprite.setScale(2 * radius);
@@ -310,7 +310,6 @@ public class Planet implements InputReceiver, Disposable, ObservableCircle {
 
 	@Override
 	public Rectangle getRectangle() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

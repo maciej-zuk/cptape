@@ -6,23 +6,21 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 
 public class Game implements ApplicationListener {
-	public static GameInputProcessor giListener;
-	public static GestureProcessor gProcessor;
+	public static GameGestureListener gestureListener;
+	public static GameGestureDetector gestureDetector;
 
 	@Override
 	public void create() {
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 
-		giListener = new GameInputProcessor();
+		gestureListener = new GameGestureListener();
 
 		Assets.loadAssets();
 		Assets.camera.setToOrtho(false, w, h);
 
-		gProcessor = new GestureProcessor(giListener);
-		Gdx.input.setInputProcessor(gProcessor);
-
-		// Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
+		gestureDetector = new GameGestureDetector(gestureListener);
+		Gdx.input.setInputProcessor(gestureDetector);
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 
 		Assets.system.populate(100, 0);
@@ -43,19 +41,17 @@ public class Game implements ApplicationListener {
 
 	@Override
 	public void render() {
-		gProcessor.update();
-		// Assets.dt = 0.025f;
+		gestureDetector.update();
 		Assets.dt = Gdx.graphics.getDeltaTime();
 		Assets.updateCams();
 
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT
 				| (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
 
-		// Assets.background.draw();
 
-		if (gProcessor.touchState.touchedAndMoved) {
-			float dx = gProcessor.touchState.positionProjected.x - Assets.playerShip.getPosition().x;
-			float dy = gProcessor.touchState.positionProjected.y - Assets.playerShip.getPosition().y;
+		if (gestureDetector.touchState.touchedAndMoved) {
+			float dx = gestureDetector.touchState.positionProjected.x - Assets.playerShip.getPosition().x;
+			float dy = gestureDetector.touchState.positionProjected.y - Assets.playerShip.getPosition().y;
 			if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
 				Assets.playerShip.getVelocity().add(dx / 50.0f, dy / 50.0f);
 				Assets.playerShip.smokeSupply = 20;
@@ -73,9 +69,10 @@ public class Game implements ApplicationListener {
 		Assets.batch.begin();
 		Assets.playerShip.draw();
 		Assets.fx.draw();
-		GuideUi.draw();
-		ShieldUi.draw(Assets.playerShip.health);
-		BoxUi.draw(Assets.playerShip.boxesOnBoard);
+        SimpleFX.drawGuide();
+        SimpleFX.drawShields(Assets.playerShip.health);
+        SimpleFX.drawBoxes(Assets.playerShip.boxesOnBoard);
+
 		Assets.font.setScale(Assets.camera.zoom * 0.4f);
 		Assets.font.setColor(Color.WHITE);
 		Assets.font.draw(Assets.batch, "fps: " + Gdx.graphics.getFramesPerSecond(), Assets.camera.position.x

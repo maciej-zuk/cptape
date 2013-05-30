@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.taigh.ape.GameInputProcessor.InputReceiver;
+import com.taigh.ape.GameGestureListener.InputReceiver;
 
 public class PlanetMenu implements Menu {
 
@@ -74,7 +74,7 @@ public class PlanetMenu implements Menu {
 		entry.callback = callback;
 		Assets.font.setScale(0.75f);
 		entries.add(entry);
-		Game.giListener.registerReceiver(entry);
+		Game.gestureListener.registerReceiver(entry);
 		prepare();
 		return entries.indexOf(entry);
 	}
@@ -93,7 +93,7 @@ public class PlanetMenu implements Menu {
 
 	public void clearMenu() {
 		for (Entry entry : entries) {
-			Game.giListener.unregisterReceiver(entry);
+			Game.gestureListener.unregisterReceiver(entry);
 		}
 		entries.clear();
 	}
@@ -102,7 +102,7 @@ public class PlanetMenu implements Menu {
 	public void delEntry(int id) {
 		if (id >= 0 && id < entries.size()) {
 			Entry entry = entries.get(id);
-			Game.giListener.unregisterReceiver(entry);
+			Game.gestureListener.unregisterReceiver(entry);
 			entries.remove(id);
 			prepare();
 		}

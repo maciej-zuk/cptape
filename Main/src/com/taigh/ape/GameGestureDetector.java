@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector3;
 
-public class GestureProcessor extends GestureDetector {
+public class GameGestureDetector extends GestureDetector {
 
 	public class TouchState {
 		Vector3 position = new Vector3();
@@ -15,13 +15,13 @@ public class GestureProcessor extends GestureDetector {
 
 	public TouchState touchState;
 
-	public GestureProcessor(GestureListener listener) {
+	public GameGestureDetector(GestureListener listener) {
 		super(listener);
 		touchState = new TouchState();
 	}
 
-	public GestureProcessor(float halfTapSquareSize, float tapCountInterval, float longPressDuration,
-			float maxFlingDelay, GestureListener listener) {
+	public GameGestureDetector(float halfTapSquareSize, float tapCountInterval, float longPressDuration,
+                               float maxFlingDelay, GestureListener listener) {
 		super(halfTapSquareSize, tapCountInterval, longPressDuration, maxFlingDelay, listener);
 	}
 
